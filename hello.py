@@ -1,24 +1,51 @@
 import csv
 
+# clean up an address passed in 
+def getCleanAddress(row):
+    address = ""
+    # extract address related fields
+    Recipient_Business = row[r'Recipient Business']
+    Recipient_Address = row[r'Recipient Address']
+    Recipient_Address2 = row[r'Recipient Address2']
+    Recipient_City = row[r'Recipient City']
+    Recipient_State = row[r'Recipient State']
+    Recipient_Zip = row[r'Recipient Zip']
+
+    # add them to final address if they are not empty
+    if Recipient_Business:
+        address += Recipient_Business + ", "
+    if Recipient_Address:
+        address += Recipient_Address + ", "
+    if Recipient_Address2:
+        address += Recipient_Address2 + ", "
+    if Recipient_City:
+        address += Recipient_City + ", "
+    if Recipient_State:
+        address += Recipient_State + ", "
+    if Recipient_Zip:
+        address += Recipient_Zip 
+    return address
+
+# add then params to construct a custom message
+def constructMessage(order, name, address):
+    # add message
+    message = (
+    f"Hi, this is Julie from edible Arrangements Kirkland store. We have a delivery for {name} under an order number {order}. We wanted to verify the address given to us. The address is {address}. Is this the correct address? We make fresh orders in the morning and our driver will be out for delivery from 12 noon to 7pm. Delivery times cannot be guaranteed. You can find more information on Edible Arrangements delivery policy at https://www.ediblearrangements.com/legal/delivery-policy.aspx As our product is perishable, we want to make sure that there will be someone to receive it. Thank you"
+    )
+    return message
+
 def main():
     # read csv file if it exists
     exampleFile = open('Kirkland.csv')
     exampleDictReader = csv.DictReader(exampleFile)
     # extract fields that are necessary
     for row in exampleDictReader:
-        order = row[r'Order No'],
-        name = row[r'Recipient'], 
-        phone = row[r'Recipient Phone'],
-        address = row[r'Recipient Business'] +'\n'+ row[r'Recipient Address'] +'\n'+ row[r'Recipient Address2'] +'\n'+ row[r'Recipient City'] +'\n'+ row[r'Recipient State'] +'\n'+ row[r'Recipient Zip']
-    
-    # add message
-    # Hi, this is Julie from edible Arrangements Kirkland store.
-    # We have a delivery for " "  under an order number ending in " ”.
-    # We wanted to verify the address given to us. The address is " "
-    # Is this the correct address?
-    # We make fresh orders in the morning and our driver will be out for delivery from 12 noon to 7pm. Delivery times cannot be guaranteed. You can find more information on Edible Arrangements delivery policy at  https://www.ediblearrangements.com/legal/delivery-policy.aspx 
-    # As our product is perishable, we want to make sure that there will be someone to receive it.
-    # Thank you
+        order = row[r'Order No']
+        name = row[r'Recipient']
+        phone = row[r'Recipient Phone']
+        address = getCleanAddress(row)
+        message = constructMessage(order, name, address)
+        print(message)
 
     # create new csv file with extracted fields
 
