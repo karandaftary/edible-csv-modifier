@@ -31,8 +31,10 @@ def getCleanAddress(row):
 def constructMessage(order, name, address):
     # add message
     message = (
-    f"Hi, this is Julie from edible Arrangements Kirkland store. We have a delivery for {name} under an order number {order}. We wanted to verify the address given to us. The address is {address}. Is this the correct address? We make fresh orders in the morning and our driver will be out for delivery from 12 noon to 7pm. Delivery times cannot be guaranteed. You can find more information on Edible Arrangements delivery policy at https://www.ediblearrangements.com/legal/delivery-policy.aspx As our product is perishable, we want to make sure that there will be someone to receive it. Thank you"
+    f"Hi,\nThis is Julie from Edible Arrangements Kirkland store.\nWe have a delivery for {name} under an order number {order}. We wanted to verify the address given to us.\n\nThe address is\n{address}\n\nIs this the correct address? Please respond over text.\n\nWe make fresh orders in the morning and our driver will be out for delivery from 12 noon to 7pm. Delivery times cannot be guaranteed. You can find more information on Edible Arrangements delivery policy at https://www.ediblearrangements.com/legal/delivery-policy.aspx As our product is perishable, we want to make sure that there will be someone to receive it.\nThank you"
     )
+    print(f'\n======{name}======')
+    print(message)
     return message
 
 def process(inputFilePath):
@@ -41,10 +43,9 @@ def process(inputFilePath):
     exampleDictReader = csv.DictReader(inputFile)
 
     # prep output file too
-    outputFile = open(f'modified_{inputFilePath}', 'w', newline='')
-    outputDictWriter = csv.DictWriter(outputFile, ['Phone', 'Message'])
-    outputDictWriter.writeheader()
-
+    # outputFile = open(f'modified_{inputFilePath}', 'w', newline='')
+    # outputDictWriter = csv.DictWriter(outputFile, ['Phone', 'Message'])
+    
 
     # extract fields that are necessary
     for row in exampleDictReader:
@@ -53,10 +54,13 @@ def process(inputFilePath):
         phone = row[r'Recipient Phone']
         address = getCleanAddress(row)
         message = constructMessage(order, name, address)
-        outputDictWriter.writerow({'Phone': phone, 'Message': message})
+        # outputDictWriter.writerow({'Phone': phone, 'Message': message})
+        f = open(f"{phone}.txt", "w")
+        f.write(f"{phone}\n\n{message}");
+        f.close()
 
     # clean up files
-    outputFile.close()
+    # outputFile.close()
     inputFile.close()
 
 # enumerate all files in current folder
