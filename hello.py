@@ -1,4 +1,5 @@
 import csv
+import os, fnmatch
 
 # clean up an address passed in 
 def getCleanAddress(row):
@@ -34,13 +35,13 @@ def constructMessage(order, name, address):
     )
     return message
 
-def main():
+def main(inputFilePath):
     # read csv file if it exists
-    inputFile = open('Kirkland.csv')
+    inputFile = open(inputFilePath)
     exampleDictReader = csv.DictReader(inputFile)
 
     # prep output file too
-    outputFile = open('output.csv', 'w', newline='')
+    outputFile = open(f'modified_{inputFilePath}', 'w', newline='')
     outputDictWriter = csv.DictWriter(outputFile, ['Phone', 'Message'])
     outputDictWriter.writeheader()
 
@@ -58,6 +59,14 @@ def main():
     outputFile.close()
     inputFile.close()
 
+def enumerateFileNames():
+    listOfFiles = os.listdir('.')
+    pattern = "*.csv"
+    for csvFile in listOfFiles:
+        if fnmatch.fnmatch(csvFile, pattern):
+            if not 'modified' in csvFile: 
+                main(csvFile)
+
 # entry point
 if __name__ == "__main__":
-    main()
+    enumerateFileNames()
