@@ -36,8 +36,15 @@ def constructMessage(order, name, address):
 
 def main():
     # read csv file if it exists
-    exampleFile = open('Kirkland.csv')
-    exampleDictReader = csv.DictReader(exampleFile)
+    inputFile = open('Kirkland.csv')
+    exampleDictReader = csv.DictReader(inputFile)
+
+    # prep output file too
+    outputFile = open('output.csv', 'w', newline='')
+    outputDictWriter = csv.DictWriter(outputFile, ['Phone', 'Message'])
+    outputDictWriter.writeheader()
+
+
     # extract fields that are necessary
     for row in exampleDictReader:
         order = row[r'Order No']
@@ -45,9 +52,11 @@ def main():
         phone = row[r'Recipient Phone']
         address = getCleanAddress(row)
         message = constructMessage(order, name, address)
-        print(message)
+        outputDictWriter.writerow({'Phone': phone, 'Message': message})
 
-    # create new csv file with extracted fields
+    # clean up files
+    outputFile.close()
+    inputFile.close()
 
 # entry point
 if __name__ == "__main__":
