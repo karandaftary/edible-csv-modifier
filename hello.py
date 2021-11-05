@@ -35,7 +35,7 @@ def constructMessage(order, name, address):
     )
     return message
 
-def main(inputFilePath):
+def process(inputFilePath):
     # read csv file if it exists
     inputFile = open(inputFilePath)
     exampleDictReader = csv.DictReader(inputFile)
@@ -59,14 +59,15 @@ def main(inputFilePath):
     outputFile.close()
     inputFile.close()
 
-def enumerateFileNames():
+# enumerate all files in current folder
+def start():
     listOfFiles = os.listdir('.')
     pattern = "*.csv"
     for csvFile in listOfFiles:
         if fnmatch.fnmatch(csvFile, pattern):
             if not 'modified' in csvFile: 
-                main(csvFile)
+                process(csvFile)
 
 # entry point
 if __name__ == "__main__":
-    enumerateFileNames()
+    start()
